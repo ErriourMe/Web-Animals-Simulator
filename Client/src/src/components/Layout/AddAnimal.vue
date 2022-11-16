@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useAnimalKinds } from "~/stores/animalKind";
+
+const animalKindsStore = useAnimalKinds();
 
 const isOpen = ref(false);
 
@@ -17,9 +20,23 @@ const invertButton = () => {
       <span class="mt--1">+</span>
     </button>
     <div
-      :class="`relative z-1 bg-brown-50 p-1 rounded-r ml--7 transition-all w-0 ${
-        isOpen ? `w-100 pl-11.5` : ``
+      :class="`relative z-1 bg-brown-50 p-1 pr-3 rounded-r-2 ml--7 transition-all flex ${
+        isOpen
+          ? `visible pl-11.5`
+          : `invisible pointer-events-none opacity-0 pl-0`
       }`"
-    ></div>
+    >
+      <button
+        v-for="(animal, i) in animalKindsStore.animalKinds"
+        :key="`animal-kind-${i}`"
+        class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-[6px] last:mr-0 flex-shrink-0 border-brown-500 border-2 transition hover:scale-105"
+      >
+        <img
+          class="w-6 h-6"
+          :src="`/svg/${animal.kind}.svg`"
+          :alt="`${animal.kind} icon`"
+        />
+      </button>
+    </div>
   </div>
 </template>
