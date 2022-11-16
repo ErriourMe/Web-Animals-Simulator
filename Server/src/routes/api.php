@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\v1\AnimalController;
+use App\Http\Controllers\Api\v1\AnimalKindController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Api\v1', 'prefix' => 'v1'], function () {
+    Route::get('animal_kinds', [AnimalKindController::class, 'index']);
+
+    Route::group(['prefix' => 'animals'], function () {
+        Route::get('/', [AnimalController::class, 'index']);
+        Route::get('{name}', [AnimalController::class, 'show']);
+        Route::post('/', [AnimalController::class, 'store']);
+        Route::post('/age', [AnimalController::class, 'age']);
+    });
 });
