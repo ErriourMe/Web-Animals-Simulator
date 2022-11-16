@@ -24,8 +24,18 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => 'required|string|uniquie:animals,name',
             'kind' => 'required|exists:animal_kinds,kind',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Необходимо указать имя питомца',
+            'name.uniquie' => 'Питомец с таким именем уже существует',
+            'name.required' => 'Необходимо указать тип питомца',
+            'name.exists' => 'Такого типа питомца не существует',
         ];
     }
 }
