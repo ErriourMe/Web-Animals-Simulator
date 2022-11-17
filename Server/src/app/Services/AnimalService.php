@@ -8,6 +8,7 @@ use App\Models\Animal;
 use App\Models\AnimalKind;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * Class AnimalService
@@ -18,6 +19,10 @@ class AnimalService
     public function index(): Collection
     {
         $userId = 1; // TODO: Заменить на request()->auth('api')->id при добавлении пользователей
+
+        Artisan::call("animals:calculate", [
+            'userId' => $userId,
+        ]);
         $animals = Animal::where([
             'user_id' => $userId,
             'died_at' => null,
@@ -29,6 +34,11 @@ class AnimalService
     public function show(string $name): Animal
     {
         $userId = 1; // TODO: Заменить на request()->auth('api')->id при добавлении пользователей
+
+        Artisan::call("animals:calculate", [
+            'userId' => $userId,
+            'animalName' => $name,
+        ]);
         $animal = Animal::where([
             'name' => $name,
             'user_id' => $userId

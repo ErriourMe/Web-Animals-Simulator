@@ -14,7 +14,7 @@ const props = withDefaults(
 
 const speed: number = 1;
 
-const growth = ref(1);
+const growth = ref(props.animal.size || 1);
 const animalKindsStore = useAnimalKinds();
 const animalsStore = useAnimals();
 const currentAnimalKind = animalKindsStore.getAnimalKind(props.animal.kind);
@@ -36,7 +36,7 @@ setTimeout(() => {
   clearInterval(growthInterval);
   dead.value = true;
   animalsStore.deleteAnimal(props.animal.name, 3000);
-}, ((currentAnimalKind?.max_age || 10) * 1000) / speed);
+}, (((currentAnimalKind?.max_age || 10) - (props.animal.age || 0)) * 1000) / speed);
 
 const item = ref<HTMLElement | null>(null);
 
