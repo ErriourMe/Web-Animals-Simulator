@@ -25,6 +25,18 @@ export const useAnimals = defineStore('animals', {
           console.log(err);
         });
     },
+    async getAnimals() {
+      const animals = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (animals.ok) this.setAnimals(await animals.json());
+    },
     addAnimal(payload: IAnimal) {
       this.animals.push({
         ...payload,

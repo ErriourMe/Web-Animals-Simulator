@@ -11,12 +11,14 @@ export const useAnimalKinds = defineStore('animalKinds', {
         `${import.meta.env.VITE_API_DOMAIN}/api/v1/animal_kinds`
       );
 
-      this.setAnimalKinds(
-        (await animals.json()).map((el: IAnimalKind) => ({
-          ...el,
-          available: 1,
-        }))
-      );
+      if (animals.ok) {
+        this.setAnimalKinds(
+          (await animals.json()).map((el: IAnimalKind) => ({
+            ...el,
+            available: 1,
+          }))
+        );
+      }
     },
     setAnimalKinds(payload: IAnimalKind[]) {
       this.animalKinds = payload;
