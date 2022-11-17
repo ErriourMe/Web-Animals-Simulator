@@ -43,7 +43,7 @@ const { style } = useDraggable(item, {
 <template>
   <div class="fixed" :style="style" ref="item">
     <div
-      class="w-20 h-20 select-none flex flex-col items-center cursor-grab active:cursor-grabbing transition-all"
+      class="w-20 h-20 select-none flex flex-col items-center cursor-grab active:cursor-grabbing transition-all duration-500"
       :style="`transform: scale(${1 + growth / 50})`"
     >
       <img
