@@ -6,7 +6,7 @@ export const useAnimalKinds = defineStore('animalKinds', {
     animalKinds: [] as IAnimalKind[],
   }),
   actions: {
-    async getAnimalKinds() {
+    async loadAnimalKinds() {
       const animals = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/v1/animal_kinds`
       );
@@ -19,6 +19,9 @@ export const useAnimalKinds = defineStore('animalKinds', {
           }))
         );
       }
+    },
+    getAnimalKind(kind: string): IAnimalKind | undefined {
+      return this.animalKinds.find((el) => el.kind === kind);
     },
     setAnimalKinds(payload: IAnimalKind[]) {
       this.animalKinds = payload;

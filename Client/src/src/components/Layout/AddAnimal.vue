@@ -11,6 +11,7 @@ const animalKindsStore = useAnimalKinds();
 const animalStore = useAnimals();
 
 const isOpen = ref(false);
+const isSaving = ref(false);
 const currentAnimalKind = ref<IAnimalKind>({});
 
 const invertButton = () => {
@@ -24,15 +25,21 @@ const openCreateModal = (animalElement: IAnimalKind) => {
 };
 
 const createAnimal = (form: ICreateAnimalForm) => {
-  animalStore.createAnimal({
-    name: form.name,
-    kind: currentAnimalKind.value?.kind || '',
-  });
+  isSaving.value = true;
+  animalStore
+    .createAnimal({
+      name: form.name,
+      kind: currentAnimalKind.value?.kind || '',
+    })
+    .then(() => {
+      isSaving.value = false;
+      useEventBus<string>(`modal:createAnimalModal.close`).emit();
+    });
 };
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex select-none">
     <button
       @click="invertButton"
       class="relative z-2 w-12 h-12 rounded-full bg-brown-500 text-white text-6 flex items-center justify-center transition hover:(bg-brown-400)"
@@ -60,6 +67,10 @@ const createAnimal = (form: ICreateAnimalForm) => {
       </button>
     </div>
 
-    <AddAnimalModal :element="currentAnimalKind" @save="createAnimal" />
+    <AddAnimalModal
+      :element="currentAnimalKind"
+      :isSaving="isSaving"
+      @save="createAnimal"
+    />
   </div>
 </template>

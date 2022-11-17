@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import BaseModal from '~/components/Utils/BaseModal.vue';
+import LoadingElement from '~/components/Utils/LoadingElement.vue';
 
 import type { Ref } from 'vue';
 import type { IAnimalKind } from '~/Interfaces/IAnimalKind';
@@ -15,13 +16,20 @@ const emit = defineEmits(['save']);
 const props = withDefaults(
   defineProps<{
     element: IAnimalKind;
+    isSaving: boolean;
   }>(),
   {}
 );
+
+const clearData = () => {
+  form.value = {
+    name: '',
+  };
+};
 </script>
 
 <template>
-  <BaseModal id="createAnimalModal">
+  <BaseModal id="createAnimalModal" @closed="clearData">
     <div class="flex flex-col items-center justify-center w-full">
       <img class="w-40 h-40" :src="`/svg/${props.element?.kind}.svg`" alt="" />
 
@@ -35,11 +43,12 @@ const props = withDefaults(
           v-model="form.name"
         />
         <button
-          :disabled="!form.name"
+          :disabled="!form.name || isSaving"
           @click="emit('save', form)"
-          class="w-full bg-brown rounded-3 text-white p-3 mt-3 disabled:(opacity-80 cursor-no-drop)"
+          class="w-full bg-brown rounded-3 flex justify-center text-white p-3 mt-3 disabled:(opacity-80 cursor-no-drop)"
         >
-          Создать питомца
+          <LoadingElement class="w-6 h-6" v-if="isSaving" />
+          <template v-else> Создать питомца </template>
         </button>
       </div>
     </div>

@@ -1,38 +1,38 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import HeaderLayout from '~/components/Layout/HeaderLayout.vue';
+import LoadingElement from '~/components/Utils/LoadingElement.vue';
 import AnimalItem from '~/components/AnimalItem.vue';
 import { useAnimalKinds } from '~/stores/animalKind';
 import { useAnimals } from '~/stores/animal';
 
 const animalKindsStore = useAnimalKinds();
 const animalsStore = useAnimals();
-const loading = ref(true);
+const isLoading = ref(true);
 
 Promise.all([
-  animalKindsStore.getAnimalKinds(),
-  animalsStore.getAnimals(),
+  animalKindsStore.loadAnimalKinds(),
+  animalsStore.loadAnimals(),
 ]).then(() => {
-  loading.value = false;
+  isLoading.value = false;
 });
 </script>
 
 <template>
-  <div v-if="loading">Loading</div>
+  <div v-if="isLoading">
+    <div class="w-[100vw] h-[100vh] flex items-center justify-center">
+      <LoadingElement class="w-50 h-50" />
+    </div>
+  </div>
   <template v-else>
     <HeaderLayout />
 
     <main>
       <AnimalItem
         v-for="(animal, i) in animalsStore.animals"
+        :animal="animal"
         :key="`animal-${i}`"
       />
     </main>
   </template>
 </template>
-
-<style lang="postcss">
-body {
-  --at-apply: bg-gradient-to-b from-lightblue-500 to-blue-500 h-full;
-}
-</style>

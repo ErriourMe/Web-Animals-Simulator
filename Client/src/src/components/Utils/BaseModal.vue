@@ -18,6 +18,8 @@ const props = withDefaults(
   }
 );
 
+const emit = defineEmits(['opened', 'closed']);
+
 const openModalEvent = useEventBus<string>(`modal:${props.id}.open`);
 const closeModalEvent = useEventBus<string>(`modal:${props.id}.close`);
 
@@ -25,10 +27,12 @@ const isOpen = ref(false);
 
 const openModal = () => {
   isOpen.value = true;
+  emit('opened');
 };
 
 const closeModal = () => {
   isOpen.value = false;
+  emit('closed');
 };
 
 openModalEvent.on(() => openModal());

@@ -2,6 +2,7 @@ body {
   padding: 0;
   margin: 0;
   min-height: 100vh;
+  --at-apply: bg-gradient-to-b from-lightblue-500 to-blue-500 h-full;
 }
 
 #app {

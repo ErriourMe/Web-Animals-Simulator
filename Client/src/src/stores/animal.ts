@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import type { IAnimal } from '~/Interfaces/IAnimal';
+import { useWindowSize } from '@vueuse/core';
 
 export const useAnimals = defineStore('animals', {
   state: () => ({
@@ -9,24 +10,26 @@ export const useAnimals = defineStore('animals', {
     setAnimals(payload: IAnimal[]) {
       this.animals = payload;
     },
-    createAnimal(payload: IAnimal) {
-      fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((res) => {
-          this.addAnimal(payload);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    async createAnimal(payload: IAnimal) {
+      const data = await fetch(
+        `${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (data.ok) {
+        this.addAnimal(payload);
+        // return new Promise((resolve, reject) => {});
+      }
     },
-    async getAnimals() {
-      const animals = await fetch(
+    async loadAnimals() {
+      const data = await fetch(
         `${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`,
         {
           headers: {
@@ -35,13 +38,36 @@ export const useAnimals = defineStore('animals', {
           },
         }
       );
-      if (animals.ok) this.setAnimals(await animals.json());
+
+      if (data.ok) {
+        const animals = await data.json();
+        const { width, height } = useWindowSize();
+        const areaSize: number =
+          width.value / animals.length < 300
+            ? width.value / animals.length
+            : 300;
+        const offset: number =
+          (width.value - areaSize * animals.length) / 2 > 0
+            ? (width.value - areaSize * animals.length) / 2 + 80
+            : 40;
+
+        this.setAnimals(
+          animals.map((el: IAnimal, i: number) => ({
+            ...el,
+            x: areaSize * i + offset,
+            y: height.value / 2 - 40,
+          }))
+        );
+      }
     },
     addAnimal(payload: IAnimal) {
+      const { width, height } = useWindowSize();
       this.animals.push({
         ...payload,
         age: 0,
         size: 0,
+        x: width.value / 2 + 40,
+        y: height.value / 2 + 40,
       });
     },
   },
