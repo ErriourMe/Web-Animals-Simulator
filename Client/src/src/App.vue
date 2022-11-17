@@ -29,9 +29,9 @@ Promise.all([
 
     <main>
       <AnimalItem
-        v-for="(animal, i) in animalsStore.animals"
+        v-for="animal in animalsStore.animals"
         :animal="animal"
-        :key="`animal-${i}`"
+        :key="`animal-${animal.name}`"
       />
     </main>
   </template>

@@ -54,8 +54,8 @@ const createAnimal = (form: ICreateAnimalForm) => {
       }`"
     >
       <button
-        v-for="(animal, i) in animalKindsStore.animalKinds"
-        :key="`animal-kind-${i}`"
+        v-for="animal in animalKindsStore.animalKinds"
+        :key="`animal-kind-${animal.kind}`"
         class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-[6px] last:mr-0 flex-shrink-0 border-brown-500 border-2 transition hover:scale-105"
         @click="openCreateModal(animal)"
       >

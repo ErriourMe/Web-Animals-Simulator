@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useDraggable } from '@vueuse/core';
 import type { IAnimal } from '~/Interfaces/IAnimal';
 import { useAnimalKinds } from '~/stores/animalKind';
+import { useAnimals } from '~/stores/animal';
 
 const props = withDefaults(
   defineProps<{
@@ -11,8 +12,11 @@ const props = withDefaults(
   {}
 );
 
+const speed: number = 1;
+
 const growth = ref(1);
 const animalKindsStore = useAnimalKinds();
+const animalsStore = useAnimals();
 const currentAnimalKind = animalKindsStore.getAnimalKind(props.animal.kind);
 const dead = ref(false);
 const grown = ref(false);
@@ -26,12 +30,13 @@ const growthInterval = setInterval(() => {
   } else {
     growth.value = nextGrowth;
   }
-}, 1000);
+}, 1000 / speed);
 
 setTimeout(() => {
   clearInterval(growthInterval);
   dead.value = true;
-}, (currentAnimalKind?.max_age || 10) * 1000);
+  animalsStore.deleteAnimal(props.animal.name, 3000);
+}, ((currentAnimalKind?.max_age || 10) * 1000) / speed);
 
 const item = ref<HTMLElement | null>(null);
 

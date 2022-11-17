@@ -25,7 +25,6 @@ export const useAnimals = defineStore('animals', {
 
       if (data.ok) {
         this.addAnimal(payload);
-        // return new Promise((resolve, reject) => {});
       }
     },
     async loadAnimals() {
@@ -52,11 +51,13 @@ export const useAnimals = defineStore('animals', {
             : 40;
 
         this.setAnimals(
-          animals.map((el: IAnimal, i: number) => ({
-            ...el,
-            x: areaSize * i + offset,
-            y: height.value / 2 - 40,
-          }))
+          animals.map(
+            (el: IAnimal, i: number): IAnimal => ({
+              ...el,
+              x: areaSize * i + offset,
+              y: height.value / 2 - 40,
+            })
+          )
         );
       }
     },
@@ -69,6 +70,23 @@ export const useAnimals = defineStore('animals', {
         x: width.value / 2 + 40,
         y: height.value / 2 + 40,
       });
+    },
+    deleteAnimal(name: string, delay: number = 0) {
+      fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals/age`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      setTimeout(() => {
+        this.animals.splice(
+          this.animals.findIndex((el: IAnimal) => el.name === name),
+          1
+        );
+      }, delay);
     },
   },
 });
