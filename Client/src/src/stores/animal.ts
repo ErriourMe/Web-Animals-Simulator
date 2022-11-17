@@ -10,7 +10,7 @@ export const useAnimals = defineStore('animals', {
       this.animals = payload;
     },
     createAnimal(payload: IAnimal) {
-      fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animal_kinds`, {
+      fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
