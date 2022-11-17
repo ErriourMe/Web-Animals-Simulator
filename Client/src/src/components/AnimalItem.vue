@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue";
-import { useDraggable } from "@vueuse/core";
+import { ref, watch } from 'vue';
+import { useDraggable } from '@vueuse/core';
 
 const item = ref<HTMLElement | null>(null);
 

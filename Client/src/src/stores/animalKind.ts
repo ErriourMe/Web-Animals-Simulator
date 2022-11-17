@@ -1,14 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
+import type { IAnimalKind } from '~/Interfaces/IAnimalKind';
 
-interface IAnimalKind {
-  kind: string;
-  max_size: number;
-  max_age: number;
-  growth_factor: number;
-  available?: number;
-}
-
-export const useAnimalKinds = defineStore("animalKinds", {
+export const useAnimalKinds = defineStore('animalKinds', {
   state: () => ({
     animalKinds: [] as IAnimalKind[],
   }),
@@ -19,7 +12,10 @@ export const useAnimalKinds = defineStore("animalKinds", {
       );
 
       this.setAnimalKinds(
-        (await animals.json()).map((el: IAnimalKind) => (el.available = 1))
+        (await animals.json()).map((el: IAnimalKind) => ({
+          ...el,
+          available: 1,
+        }))
       );
     },
     setAnimalKinds(payload: IAnimalKind[]) {

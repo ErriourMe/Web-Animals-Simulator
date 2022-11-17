@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import AddAnimal from "~/components/Layout/AddAnimal.vue";
+import AddAnimal from '~/components/Layout/AddAnimal.vue';
 </script>
 
 <template>

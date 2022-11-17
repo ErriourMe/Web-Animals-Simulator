@@ -1,13 +1,33 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-import { useAnimalKinds } from "~/stores/animalKind";
+import { ref } from 'vue';
+import { useEventBus } from '@vueuse/core';
+import { useAnimalKinds } from '~/stores/animalKind';
+import { useAnimals } from '~/stores/animal';
+import AddAnimalModal from '~/components/Modals/AddAnimalModal.vue';
+import type { IAnimalKind } from '~/Interfaces/IAnimalKind';
+import type { ICreateAnimalForm } from '~/Interfaces/ICreateAnimalForm';
 
 const animalKindsStore = useAnimalKinds();
+const animalStore = useAnimals();
 
 const isOpen = ref(false);
+const currentAnimalKind = ref<IAnimalKind>({});
 
 const invertButton = () => {
   isOpen.value = !isOpen.value;
+};
+
+const openCreateModal = (animalElement: IAnimalKind) => {
+  currentAnimalKind.value = animalElement;
+  const bus = useEventBus<string>(`modal:createAnimalModal.open`);
+  bus.emit();
+};
+
+const createAnimal = (form: ICreateAnimalForm) => {
+  animalStore.createAnimal({
+    name: form.name,
+    kind: currentAnimalKind.value?.kind,
+  });
 };
 </script>
 
@@ -30,6 +50,7 @@ const invertButton = () => {
         v-for="(animal, i) in animalKindsStore.animalKinds"
         :key="`animal-kind-${i}`"
         class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-[6px] last:mr-0 flex-shrink-0 border-brown-500 border-2 transition hover:scale-105"
+        @click="openCreateModal(animal)"
       >
         <img
           class="w-6 h-6"
@@ -38,5 +59,7 @@ const invertButton = () => {
         />
       </button>
     </div>
+
+    <AddAnimalModal :element="currentAnimalKind" @save="createAnimal" />
   </div>
 </template>

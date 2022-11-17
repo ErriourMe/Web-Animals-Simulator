@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import HeaderLayout from "~/components/Layout/HeaderLayout.vue";
-import AnimalItem from "~/components/AnimalItem.vue";
-import { useAnimalKinds } from "~/stores/animalKind";
-import { useAnimals } from "~/stores/animal";
+import HeaderLayout from '~/components/Layout/HeaderLayout.vue';
+import AnimalItem from '~/components/AnimalItem.vue';
+import { useAnimalKinds } from '~/stores/animalKind';
+import { useAnimals } from '~/stores/animal';
 
 const animalKindsStore = useAnimalKinds();
 const animalsStore = useAnimals();
