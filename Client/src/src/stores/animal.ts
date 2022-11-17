@@ -12,6 +12,10 @@ export const useAnimals = defineStore('animals', {
     createAnimal(payload: IAnimal) {
       fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`, {
         method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(payload),
       })
         .then((res) => {
