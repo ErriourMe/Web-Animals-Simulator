@@ -26,7 +26,7 @@ const openCreateModal = (animalElement: IAnimalKind) => {
 const createAnimal = (form: ICreateAnimalForm) => {
   animalStore.createAnimal({
     name: form.name,
-    kind: currentAnimalKind.value?.kind,
+    kind: currentAnimalKind.value?.kind || '',
   });
 };
 </script>

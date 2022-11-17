@@ -1,6 +1,6 @@
 export interface IAnimal {
   kind: string;
-  name: number;
+  name: string;
   age?: number;
   size?: number;
 }
