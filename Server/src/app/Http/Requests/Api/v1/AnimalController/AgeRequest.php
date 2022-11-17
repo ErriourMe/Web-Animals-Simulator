@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\v1\AnimalController;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class AgeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:animals,name',
-            'kind' => 'required|exists:animal_kinds,kind',
+            'name' => 'required|string|exists:animals,name',
         ];
     }
 
@@ -33,9 +32,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name.required' => 'Необходимо указать имя питомца',
-            'name.unique' => 'Питомец с таким именем уже существует',
-            'kind.required' => 'Необходимо указать тип питомца',
-            'kind.exists' => 'Такого типа питомца не существует',
+            'name.exists' => 'Питомца с таким именем не существует',
         ];
     }
 }

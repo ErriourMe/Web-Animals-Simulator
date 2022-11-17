@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\v1\AnimalController\AgeRequest;
 use App\Http\Requests\Api\v1\AnimalController\StoreRequest;
 use App\Http\Resources\Animal\AnimalResource;
 use App\Services\AnimalService;
@@ -32,6 +33,15 @@ class AnimalController extends Controller
     public function store(StoreRequest $request): JsonResponse
     {
         $this->animalService->store($request);
+        return response()->json([
+            'error' => null,
+            'data' => 'ok',
+        ]);
+    }
+
+    public function age(AgeRequest $request): JsonResponse
+    {
+        $this->animalService->age($request);
         return response()->json([
             'error' => null,
             'data' => 'ok',

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Api\v1\AnimalController\AgeRequest;
 use App\Http\Requests\Api\v1\AnimalController\StoreRequest;
 use App\Models\Animal;
 use App\Models\AnimalKind;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -45,5 +47,14 @@ class AnimalService
             'user_id' => $userId,
             'name' => $request->name,
         ]);
+    }
+
+    public function age(AgeRequest $request): bool
+    {
+        Animal::where('name', $request->name)->update([
+            'died_at' => Carbon::now(),
+        ]);
+
+        return true;
     }
 }
