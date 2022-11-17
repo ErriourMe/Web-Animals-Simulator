@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { IAnimal } from '~/Interfaces/IAnimal';
 import { useWindowSize } from '@vueuse/core';
+import { useAnimalKinds } from '~/stores/animalKind';
 
 export const useAnimals = defineStore('animals', {
   state: () => ({
@@ -25,6 +26,9 @@ export const useAnimals = defineStore('animals', {
 
       if (data.ok) {
         this.addAnimal(payload);
+        useAnimalKinds().changeCountAnimalKinds(payload.kind, -1);
+      } else {
+        return Promise.reject(await data.json());
       }
     },
     async loadAnimals() {
@@ -71,8 +75,9 @@ export const useAnimals = defineStore('animals', {
         y: height.value / 2 + 40,
       });
     },
-    deleteAnimal(name: string, delay: number = 0) {
-      fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals/age`, {
+    async deleteAnimal(name: string, delay: number = 0) {
+      const index = this.animals.findIndex((el: IAnimal) => el.name === name);
+      await fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals/age`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -82,10 +87,8 @@ export const useAnimals = defineStore('animals', {
       });
 
       setTimeout(() => {
-        this.animals.splice(
-          this.animals.findIndex((el: IAnimal) => el.name === name),
-          1
-        );
+        useAnimalKinds().changeCountAnimalKinds(this.animals[index].kind, 1);
+        this.animals.splice(index, 1);
       }, delay);
     },
   },

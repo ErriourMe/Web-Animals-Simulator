@@ -3,5 +3,5 @@ export interface IAnimalKind {
   max_size?: number;
   max_age?: number;
   growth_factor?: number;
-  available?: number;
+  available_count?: number;
 }

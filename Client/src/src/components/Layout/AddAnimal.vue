@@ -1,10 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useEventBus } from '@vueuse/core';
+import { useToast } from 'vue-toastification';
+
 import { useAnimalKinds } from '~/stores/animalKind';
 import { useAnimals } from '~/stores/animal';
+import ErrorNotification from '~/components/Notifications/ErrorNotification.vue';
 import AddAnimalModal from '~/components/Modals/AddAnimalModal.vue';
 import type { IAnimalKind } from '~/Interfaces/IAnimalKind';
+import type { IUnprocessable } from '~/Interfaces/IUnprocessable';
 import type { ICreateAnimalForm } from '~/Interfaces/ICreateAnimalForm';
 
 const animalKindsStore = useAnimalKinds();
@@ -34,6 +38,26 @@ const createAnimal = (form: ICreateAnimalForm) => {
     .then(() => {
       isSaving.value = false;
       useEventBus<string>(`modal:createAnimalModal.close`).emit();
+    })
+    .catch((err: IUnprocessable) => {
+      isSaving.value = false;
+      const toast = useToast();
+
+      for (let el in err.errors) {
+        err.errors[el].map((val: string) => {
+          toast(
+            {
+              component: ErrorNotification,
+              props: {
+                text: val,
+              },
+            },
+            {
+              timeout: 10000,
+            }
+          );
+        });
+      }
     });
 };
 </script>
@@ -56,8 +80,11 @@ const createAnimal = (form: ICreateAnimalForm) => {
       <button
         v-for="animal in animalKindsStore.animalKinds"
         :key="`animal-kind-${animal.kind}`"
-        class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-[6px] last:mr-0 flex-shrink-0 border-brown-500 border-2 transition hover:scale-105"
+        :class="`${
+          Number(animal.available_count) <= 0 ? `cursor-no-drop opacity-30` : ``
+        } w-10 h-10 bg-white rounded-full flex items-center justify-center mr-[6px] last:mr-0 flex-shrink-0 border-brown-500 border-2 transition hover:scale-105`"
         @click="openCreateModal(animal)"
+        :disabled="Number(animal.available_count) <= 0"
       >
         <img
           class="w-6 h-6"

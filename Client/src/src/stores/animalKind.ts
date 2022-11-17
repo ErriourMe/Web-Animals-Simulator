@@ -15,7 +15,7 @@ export const useAnimalKinds = defineStore('animalKinds', {
         this.setAnimalKinds(
           (await animals.json()).map((el: IAnimalKind) => ({
             ...el,
-            available: 1,
+            available_count: 1,
           }))
         );
       }
@@ -25,6 +25,13 @@ export const useAnimalKinds = defineStore('animalKinds', {
     },
     setAnimalKinds(payload: IAnimalKind[]) {
       this.animalKinds = payload;
+    },
+    changeCountAnimalKinds(kind: string, count: number) {
+      const index = this.animalKinds.findIndex((el) => el.kind === kind);
+      if (index >= 0) {
+        this.animalKinds[index].available_count =
+          Number(this.animalKinds[index].available_count) + count;
+      }
     },
   },
 });
