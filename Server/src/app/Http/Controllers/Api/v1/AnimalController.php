@@ -15,6 +15,13 @@ class AnimalController extends Controller
         private AnimalService $animalService
     ) {}
 
+    public function index(Request $request): JsonResponse
+    {
+        return response()->json(
+            AnimalResource::collection($this->animalService->index())
+        );
+    }
+
     public function show(Request $request, string $name): JsonResponse
     {
         return response()->json(

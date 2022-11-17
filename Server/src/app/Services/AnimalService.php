@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\Api\v1\AnimalController\StoreRequest;
 use App\Models\Animal;
 use App\Models\AnimalKind;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class AnimalService
@@ -12,6 +13,17 @@ use App\Models\AnimalKind;
  */
 class AnimalService
 {
+    public function index(): Collection
+    {
+        $userId = 1; // TODO: Заменить на request()->auth('api')->id при добавлении пользователей
+        $animals = Animal::where([
+            'user_id' => $userId,
+            'died_at' => null,
+        ])->with('animalKind')->get();
+
+        return $animals;
+    }
+
     public function show(string $name): Animal
     {
         $userId = 1; // TODO: Заменить на request()->auth('api')->id при добавлении пользователей
