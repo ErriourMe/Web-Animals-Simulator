@@ -8,7 +8,7 @@ export const useAnimalKinds = defineStore('animalKinds', {
   actions: {
     async loadAnimalKinds() {
       const animals = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/api/v1/animal_kinds`
+        `${import.meta.env.VITE_API_DOMAIN}/animal_kinds`
       );
 
       if (animals.ok) {

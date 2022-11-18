@@ -12,17 +12,14 @@ export const useAnimals = defineStore('animals', {
       this.animals = payload;
     },
     async createAnimal(payload: IAnimal) {
-      const data = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const data = await fetch(`${import.meta.env.VITE_API_DOMAIN}/animals`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (data.ok) {
         this.addAnimal(payload);
@@ -32,15 +29,12 @@ export const useAnimals = defineStore('animals', {
       }
     },
     async loadAnimals() {
-      const data = await fetch(
-        `${import.meta.env.VITE_API_DOMAIN}/api/v1/animals`,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const data = await fetch(`${import.meta.env.VITE_API_DOMAIN}/animals`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (data.ok) {
         const animals = await data.json();
@@ -77,7 +71,7 @@ export const useAnimals = defineStore('animals', {
     },
     async deleteAnimal(name: string, delay: number = 0) {
       const index = this.animals.findIndex((el: IAnimal) => el.name === name);
-      await fetch(`${import.meta.env.VITE_API_DOMAIN}/api/v1/animals/age`, {
+      await fetch(`${import.meta.env.VITE_API_DOMAIN}/animals/age`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
