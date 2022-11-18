@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace' => 'Api\v1', 'prefix' => 'v1'], function () {
+Route::group(['namespace' => 'Api\v1', /* 'prefix' => 'v1' */], function () {
     Route::get('animal_kinds', [AnimalKindController::class, 'index']);
 
     Route::group(['prefix' => 'animals'], function () {
