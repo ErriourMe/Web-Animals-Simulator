@@ -49,13 +49,14 @@ export const useAnimals = defineStore('animals', {
             : 40;
 
         this.setAnimals(
-          animals.map(
-            (el: IAnimal, i: number): IAnimal => ({
+          animals.map((el: IAnimal, i: number): IAnimal => {
+            useAnimalKinds().changeCountAnimalKinds(el.kind, -1);
+            return {
               ...el,
               x: areaSize * i + offset,
               y: height.value / 2 - 40,
-            })
-          )
+            };
+          })
         );
       }
     },
